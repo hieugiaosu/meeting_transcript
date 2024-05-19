@@ -1,9 +1,8 @@
 from fastapi import APIRouter
-from DTO.test_dto import TestDTO
-from Services.testService import test
+from DTO.etablishConnectionDTO import EtablishConnectionDTO
+from Services.connection.connection_service import *
 connectionController = APIRouter()
 
-@connectionController.get("/",response_model=TestDTO,status_code=200)
+@connectionController.get("/",response_model=EtablishConnectionDTO,status_code=200)
 async def connectionEstablish():
-    test()
-    return TestDTO()
+    return await newSecretId()

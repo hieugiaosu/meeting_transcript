@@ -12,7 +12,7 @@ PORT = int(os.getenv("PORT"))
 
 app = FastAPI()
 for middleware in middlewareList:
-    app.add_middleware(**middleware)
+    app.add_middleware(middleware['middleware_class'],**middleware['options'])
 app.include_router(mainRouter,prefix='/api')
 
 
