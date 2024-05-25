@@ -9,7 +9,8 @@ rabbit_mq_connection = pika.BlockingConnection(
     pika.ConnectionParameters(
         host=os.getenv("RABBIT_MQ_HOST"),
         port=os.getenv("RABBIT_MQ_PORT"),
-        credentials=PlainCredentials(os.getenv("RABBIT_MQ_USER"),os.getenv("RABBIT_MQ_PASSWORD"))
+        credentials=PlainCredentials(os.getenv("RABBIT_MQ_USER"),os.getenv("RABBIT_MQ_PASSWORD")),
+        heartbeat=0
     )
 )
 rabbit_mq_client = rabbit_mq_connection.channel()

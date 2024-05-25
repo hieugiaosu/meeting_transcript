@@ -10,7 +10,8 @@ import pickle
 
 async def transcript_producer(user_info:AccountInfoDTO,req:SpeechTranscriptDTORequest):
     audio = await req.audio.read()
-    audio = list(map(float,eval(json.loads(audio))))
+    data = json.loads(audio)
+    audio = list(map(float,eval(data) if isinstance(data,str) else data))
     rabbit_mq_client.basic_publish(
         exchange="",
         routing_key="whisper_inference",

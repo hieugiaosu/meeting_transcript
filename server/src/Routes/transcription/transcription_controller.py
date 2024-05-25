@@ -19,6 +19,7 @@ async def requestTranscript(
     data: SpeechTranscriptDTORequest = Depends(SpeechTranscriptDTORequest.as_form)
     ):
     account = await checkID(secret_id)
+    # if not data.end_request:
     await transcript_producer(account,data)
     return {'message':'received'}
 

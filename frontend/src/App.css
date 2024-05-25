@@ -1,0 +1,42 @@
+.gradient-text-welcome {
+  font-size: 42px; /* Adjust size as needed */
+  font-weight: bold; /* Optional: makes the text bold */
+  background: linear-gradient(to right, red, blue);
+  -webkit-background-clip: text;
+  color: transparent;
+  background-clip: text;
+}
+.welcome-side-bar {
+  background: linear-gradient(180deg, #6100FF 0%, #000000 100%);
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+.record {
+  /* background: linear-gradient(180deg, #6100FF 0%, #000000 100%); */
+  background-color: #000000;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.transcription{
+  overflow-y: scroll;
+}
+
+.circle {
+  width: 22%;
+  padding-top: 22%; /* This creates a square aspect ratio */
+  background-color: black;
+  border-radius: 50%;
+  border: 3px solid white; /* Optional: Add a border to see the circle on a white background */
+  position: relative;
+  margin: 15% 15% auto; /* Center horizontally */
+  margin-bottom: 15%;
+}

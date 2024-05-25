@@ -4,12 +4,15 @@ from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
 
 class WhisperInference:
     def __init__(self,device = 'cpu'):
-        self.processor = AutoProcessor.from_pretrained("openai/whisper-base")
-        self.model = AutoModelForSpeechSeq2Seq.from_pretrained("openai/whisper-base")
+        self.processor = AutoProcessor.from_pretrained("openai/whisper-small.en")
+        self.model = AutoModelForSpeechSeq2Seq.from_pretrained("openai/whisper-small.en")
         self.model.to(device)
         self.model.eval()
     def __call__(self,audio,sample_rate):
-        audio = torchaudio.functional.resample(torch.tensor(audio),sample_rate,16000)
+        audio = torch.tensor(audio)
+        torchaudio.save("test.wav", audio.unsqueeze(0), sample_rate)
+        if sample_rate != 16000:
+            audio = torchaudio.functional.resample(audio,sample_rate,16000)
         audio = audio.squeeze()
         with torch.no_grad():
             inputs = self.processor(
