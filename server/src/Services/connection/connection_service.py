@@ -15,6 +15,7 @@ async def newSecretId():
         json.dumps(
             {
                 "access_at":currtime,
+                "speaker_list":[]
             }),
             exat=currtime+300)
     return JSONResponse(res)
