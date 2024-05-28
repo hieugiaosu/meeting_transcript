@@ -1,0 +1,25 @@
+# Use the official Python image.
+FROM python:3.11-slim
+
+# Set the working directory.
+WORKDIR /app
+
+# Copy the requirements file and install dependencies.
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the entire source directory.
+COPY src /app/src
+
+# Define environment variables
+ENV SERVER_HOST=${SERVER_HOST}
+ENV PORT=${PORT}
+ENV RABBIT_MQ_HOST=${RABBIT_MQ_HOST}
+ENV RABBIT_MQ_PORT=${RABBIT_MQ_PORT}
+ENV RABBIT_MQ_USER=${RABBIT_MQ_USER}
+ENV RABBIT_MQ_PASSWORD=${RABBIT_MQ_PASSWORD}
+ENV REDIS_HOST=${REDIS_HOST}
+ENV REDIS_PORT=${REDIS_PORT}
+
+# Command to run your application (this will be overridden in docker-compose.yml)
+CMD ["python", "src/server.py"]

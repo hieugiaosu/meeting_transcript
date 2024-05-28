@@ -1,21 +1,20 @@
 import sys
 import os
-
-# Determine the base directory
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Add necessary directories to the system path
 sys.path.append(os.path.join(base_dir))
+sys.path.append(os.path.join(base_dir, 'utils'))
 sys.path.append(os.path.join(base_dir, 'utils', 'model_weight'))
 
+import json
+import pickle
+import time
+import torch
+from pika import BasicProperties
 from utils.bridge import rabbit_mq_client, redis_client
 from utils.whisperInference import WhisperInference
 from utils.SpeakerEmbedding import SpeakerEmbeddingInference
-from pika import BasicProperties
-import time
-import json
-import pickle
-import torch
 
 # Initialize models with relative paths
 whisper = WhisperInference()

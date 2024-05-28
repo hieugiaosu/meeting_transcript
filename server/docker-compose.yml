@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    environment:
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    ports:
+      - "${RABBIT_MQ_PORT}:${RABBIT_MQ_PORT}"
+      - "${RABBIT_MQ_PORT_CONTROL}:${RABBIT_MQ_PORT_CONTROL}"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBIT_MQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBIT_MQ_PASSWORD}
+
+  whisper_consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    volumes:
+      - ./src:/app/src
+    command: >
+      sh -c "cd /app/src && python Consumer/WhisperConsumer.py"
+    environment:
+      - RABBIT_MQ_HOST=${RABBIT_MQ_HOST}
+      - RABBIT_MQ_PORT=${RABBIT_MQ_PORT}
+      - RABBIT_MQ_USER=${RABBIT_MQ_USER}
+      - RABBIT_MQ_PASSWORD=${RABBIT_MQ_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - rabbitmq
+    volumes:
+      - ./src:/app/src
+    command: >
+      sh -c "cd /app/src && python server.py"
+    environment:
+      - SERVER_HOST=${SERVER_HOST}
+      - PORT=${PORT}
+      - RABBIT_MQ_HOST=${RABBIT_MQ_HOST}
+      - RABBIT_MQ_PORT=${RABBIT_MQ_PORT}
+      - RABBIT_MQ_USER=${RABBIT_MQ_USER}
+      - RABBIT_MQ_PASSWORD=${RABBIT_MQ_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
