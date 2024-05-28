@@ -27,13 +27,11 @@ def determineSpeaker(secret_id, e, currtime):
     userInfo = redis_client.get(secret_id)
     userInfo = json.loads(userInfo)
     if userInfo['speaker_list'] == []:
-        print('first speaker @@@')
         userInfo['speaker_list'].append(e.squeeze().numpy().tolist())
     else: 
         speaker_list = torch.tensor(userInfo['speaker_list']).float() 
         cos = e @ speaker_list.T
         cos = cos.squeeze()
-        print(cos)
         speaker = torch.argmax(cos, 0).item() if cos.dim() != 0 else 0
         similarity = cos[speaker].item() if cos.dim() != 0 else cos.item()
         if similarity < threshold:
