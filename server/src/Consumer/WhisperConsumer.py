@@ -51,7 +51,7 @@ def handler(ch, method, properties: BasicProperties, body):
     request_number = properties.headers["request_number"]
     end_request = properties.headers["end_request"]
     currtime = int(time.time())
-    
+    print(f"process query from {secret_id}")
     e = speakerEmb(audio, sample_rate)
     speaker = determineSpeaker(secret_id, e, currtime)
     transcript = whisper(audio, sample_rate)

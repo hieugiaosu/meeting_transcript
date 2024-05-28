@@ -8,6 +8,11 @@ services:
     environment:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3.10-management
@@ -17,14 +22,21 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBIT_MQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBIT_MQ_PASSWORD}
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   whisper_consumer:
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - redis
-      - rabbitmq
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     volumes:
       - ./src:/app/src
     command: >
@@ -42,10 +54,14 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - redis
-      - rabbitmq
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     volumes:
       - ./src:/app/src
+    ports:
+      - "${PORT}:${PORT}"
     command: >
       sh -c "cd /app/src && python server.py"
     environment:
